@@ -1,0 +1,36 @@
+﻿name: Automated Financial Data Tracker
+
+on:
+  schedule:
+    # Se ejecuta automáticamente todos los días a las 00:00 y 12:00 UTC
+    - cron: '0 0,12 * * *'
+  workflow_dispatch: # Botón manual para ejecutarlo cuando quieras
+  push:
+    branches: [ main ]
+
+# Permisos necesarios para que el bot de GitHub Actions pueda hacer commit y push a tu repo
+permissions:
+  contents: write
+
+jobs:
+  fetch-and-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: 2. Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 3. Ejecutar script rastreador
+        run: node tracker.js
+
+      - name: 4. Auto-Commit y Push del historial actualizado
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/cotizaciones.json
+          git diff --staged --quiet || (git commit -m "chore(data): actualizar cotizaciones automáticas [skip ci]" && git push)
