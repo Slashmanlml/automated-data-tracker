@@ -2,13 +2,11 @@
 
 on:
   schedule:
-    # Se ejecuta automáticamente todos los días a las 00:00 y 12:00 UTC
     - cron: '0 0,12 * * *'
-  workflow_dispatch: # Botón manual para ejecutarlo cuando quieras
+  workflow_dispatch:
   push:
     branches: [ main ]
 
-# Permisos necesarios para que el bot de GitHub Actions pueda hacer commit y push a tu repo
 permissions:
   contents: write
 
@@ -25,7 +23,10 @@ jobs:
         with:
           node-version: 20
 
-      - name: 3. Ejecutar script rastreador
+      - name: 3. Ejecutar script rastreador y enviar alerta
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: node tracker.js
 
       - name: 4. Auto-Commit y Push del historial actualizado
