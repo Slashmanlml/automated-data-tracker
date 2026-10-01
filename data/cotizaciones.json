@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-10-01T05:11:15.612Z",
+    "bitcoin_usd": 84131,
+    "ethereum_usd": 2709.14,
+    "estado": "OK"
+  },
+  {
     "fecha": "2026-09-30T17:51:07.169Z",
     "bitcoin_usd": 84054,
     "ethereum_usd": 2681.67,
